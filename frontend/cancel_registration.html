@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Honk&family=Quicksand:wght@300..700&display=swap"
+        rel="stylesheet">
+    <title>cancel registration</title>
+
+    <style>
+        body {
+            margin: 0;
+            color: #17313E;
+            background: linear-gradient(135deg, #dac4b1, #d6b4e4);
+            min-height: 100vh;
+            font-family: "Quicksand", sans-serif;
+            font-weight: 500;
+        }
+
+        #header-space-for-buttons {
+            height: 70px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            position: fixed;
+            top: 0;
+        }
+
+        #header-space-for-buttons h3 {
+            font-family: "Honk", system-ui;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-size: 40px;
+            font-style: normal;
+            font-variation-settings:
+                "MORF" 15,
+                "SHLN" 50;
+        }
+
+        #header-space-for-buttons input[type="button"] {
+            background: linear-gradient(135deg, #F3E2D4, #C5B0CD);
+            color: #17313E;
+            border: 1px solid #17313E;
+            font-weight: 600;
+            outline: none;
+            border-radius: 10px;
+            padding: 10px 25px;
+        }
+
+        #header-space-for-buttons input[type="button"]:hover {
+            box-shadow: 2px 2px 1px #17313E;
+        }
+
+        .main {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #cancel-form {
+            border: 1px solid #17313E;
+            border-radius: 12px;
+            padding: 2% 3%;
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            text-align: center;
+            height: 40px;
+            font-family: "Sansation", sans-serif;
+            font-style: normal;
+            background-color: transparent;
+            color: #17313E;
+            border: 1px solid #17313E;
+            font-weight: 500;
+            outline: none;
+            border-radius: 7px;
+        }
+
+        input[type="button"] {
+            background: linear-gradient(135deg, #F3E2D4, #C5B0CD);
+            color: #17313E;
+            border: 1px solid #17313E;
+            font-weight: 500;
+            outline: none;
+            border-radius: 10px;
+            padding: 3px 10px;
+        }
+
+        input[type="button"]:hover {
+            box-shadow: 2px 2px 1px #17313E;
+        }
+
+        input::placeholder {
+            color: #17313E;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main" style="width: 100%;">
+        <div id="header-space-for-buttons">
+            <h3>Event Management</h3>
+            <a href="/"><input type="button" value="Dashboard"></a>
+        </div>
+        <div id="cancel-form">
+            <input id="cancelRegId" type="number" placeholder="enter Registration ID"> <br><br>
+            <input id="cancelBtn" type="button" value="Cancel Registration" onclick="cancelRegistration()">
+        </div>
+    </div>
+
+    <script>
+        async function cancelRegistration() {
+            const regId = document.getElementById("cancelRegId").value;
+            if (!regId) {
+                alert("Please enter a Registration ID.");
+                return;
+            }
+
+            try {
+                var response = await fetch("/cancel_registration", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ reg_id: parseInt(regId) })
+                });
+
+                const result = await response.json();
+                alert(result.message);
+                
+            } catch (err) {
+                console.log(err);
+                alert("Something went wrong");
+            }
+        }
+    </script>
+</body>
+
+</html>

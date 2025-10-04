@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Honk&family=Quicksand:wght@300..700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+        rel="stylesheet">
+
+    <title>register here</title>
+
+    <style>
+        body {
+            margin: 0;
+            color: #17313E;
+            background: linear-gradient(135deg, #dac4b1, #d6b4e4);
+            min-height: 100vh;
+            font-family: "Quicksand", sans-serif;
+            font-weight: 500;
+        }
+
+        #header-space-for-buttons {
+            height: 70px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            position: fixed;
+            top: 0;
+        }
+
+        #header-space-for-buttons h3 {
+            font-family: "Honk", system-ui;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-size: 40px;
+            font-style: normal;
+            font-variation-settings:
+                "MORF" 15,
+                "SHLN" 50;
+        }
+
+        .main {
+            display: flex;
+            padding-top: 10%;
+            justify-content: center;
+        }
+
+        #main-registration-form {
+            width: 50%;
+            text-align: center;
+            border: 1px solid #17313E;
+            padding: 2%;
+            border-radius: 15px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        #main-registration-form #event-all-options {
+            width: 100%;
+            text-align: center;
+            height: 40px;
+            font-family: "Sansation", sans-serif;
+            font-style: normal;
+            background-color: transparent;
+            color: #17313E;
+            border: 1px solid #17313E;
+            font-weight: 500;
+            outline: none;
+            border-radius: 7px;
+        }
+
+        #main-registration-form #event-all-options .opt-class {
+            height: 40px;
+            font-family: "Sansation", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            background-color: transparent;
+            color: #17313E;
+            border: 1px solid #17313E;
+            font-weight: 400;
+            outline: none;
+            border-radius: 7px;
+        }
+
+        input::placeholder {
+            color: #17313E;
+        }
+
+        input[type="button"],
+        input[type="submit"] {
+            background: linear-gradient(135deg, #F3E2D4, #C5B0CD);
+            color: #17313E;
+            border: 1px solid #17313E;
+            font-weight: 600;
+            outline: none;
+            width: fit-content;
+            border-radius: 10px;
+            padding: 10px 25px;
+        }
+
+        input[type="button"]:hover,
+        input[type="submit"]:hover {
+            box-shadow: 2px 2px 1px #17313E;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main" style="width: 100%;">
+        <div id="header-space-for-buttons">
+            <h3>Event Management</h3>
+            <a href="/"><input type="button" value="Dashboard"></a>
+        </div>
+        <div id="main-registration-form">
+            <select id="event-all-options">
+            </select> <br><br>
+            <input id="customerName" type="text" placeholder="tell customer Name"><br><br>
+            <input id="customerEmail" type="email" placeholder="please give customer E-mail"><br><br>
+            <input id="seatsBooked" min="1" type="number" placeholder="number of Seats wants to book"><br><br>
+            <input id="registerBtn" type="button" value="Book My Seat">
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        //real API
+
+        //to read input from URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        window.addEventListener("DOMContentLoaded", async () => {
+            const preselectedId = getQueryParam("event_id");
+
+            await getAllEventData();
+
+            if (preselectedId) {
+                const select = document.getElementById("event-all-options");
+                select.value = preselectedId;
+            }
+        });
+
+
+        //showing dropdown
+        async function getAllEventData() {
+            var URL = "/view_events";
+            var response = await fetch(URL);
+            var data = await response.json();
+
+            var select_tag = document.querySelector("#event-all-options");
+            select_tag.innerHTML = "<option class='opt-class'>Choose any Event</option>";
+
+            data.forEach(ev => {
+                let opt = document.createElement("option");
+                opt.value = ev.id;
+                opt.textContent = ev.name + " (" + ev.seats + " seats left)";
+                select_tag.appendChild(opt);
+            });
+        }
+
+        //registration
+        document.getElementById("registerBtn").addEventListener("click", async () => {
+            let event_id = document.getElementById("event-all-options").value;
+            let user_name = document.getElementById("customerName").value;
+            let email = document.getElementById("customerEmail").value;
+            let seats_booked = document.getElementById("seatsBooked").value;
+
+            let data = {
+                event_id: event_id,
+                user_name: user_name,
+                email: email,
+                seats_booked: parseInt(seats_booked)
+            };
+
+            try {
+                var response = await fetch("/register_event", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                var result = await response.json();
+
+                if (response.ok && result.success) {
+                    alert("Your registration ID is " + result.reg_id);
+                    getAllEventData();
+                } else {
+                    alert(result.error || "Something went wrong");
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        });
+
+        getAllEventData();
+
+        //dummy
+        // function show() {
+        //     var data = [
+        //         { "id": 1, "name": "Tech Conference ", "date": "2025-10-05", "venue": "Pune", "seats": 150 },
+        //         { "id": 2, "name": "Music Fest", "date": "2025-11-12", "venue": "Bangalore", "seats": 200 },
+        //         { "id": 3, "name": "Startup Meetup", "date": "2025-12-01", "venue": "Mumbai", "seats": 80 }];
+
+        //     var select_tag = document.querySelector("#event-all-options");
+
+        //     for (let index = 0; index < data.length; index++) {
+        //         var iterate = data[index];
+
+        //         var option =
+        //             "<option class='opt-class'><a href='#'>"
+        //             + iterate.id + " / "
+        //             + iterate.name + " / "
+        //             + iterate.date + " / "
+        //             + iterate.venue + " / "
+        //             + iterate.seats + " seats"
+        //             + "</a></option>";
+        //         select_tag.innerHTML += option;
+        //     }
+        // };
+        // show();
+    </script>
+</body>
+
+</html>

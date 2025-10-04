@@ -1,32 +1,27 @@
-------- MySQL --------
+🚀 Features
 
-CREATE DATABASE IF NOT EXISTS event_system;
+	Browse Events: View upcoming events with detailed information (name, date, location, description).
 
-USE event_system;
-
-CREATE TABLE IF NOT EXISTS events (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255),
-    date DATE,
-    venue VARCHAR(255),
-    seats INT
-);
-
-CREATE TABLE IF NOT EXISTS registrations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    event_id INT,
-    user_name VARCHAR(255),
-    email VARCHAR(255),
-    seats_booked INT,
-    FOREIGN KEY (event_id) REFERENCES events(id)
-);
-
-------- install --------
-
-pip install flask flask-cors mysql-connector-python
+	Event Registration: Register for events and get a unique registration ID.
 
 
-------- final --------
+🛠️ Tech Stack
 
-python app.py (run this flask file)
-open link shown in cmd (ctrl + click on link)
+	Frontend: HTML, CSS, JavaScript, Bootstrap
+
+	Backend: Python, Flask
+
+	Database: MySQL
+
+	Others: Flask-CORS
+
+
+📸 Screenshots
+
+<img width="fit-content" height="250" alt="event (0)" src="https://github.com/user-attachments/assets/fd341f59-b88a-41ea-b79f-ead7a1be9573" />
+
+<img width="fit-content" height="250" alt="event (1)" src="https://github.com/user-attachments/assets/e2c9224a-820e-485c-93a1-cb599ffd76e9" />
+
+<img width="fit-content" height="250" alt="event (2)" src="https://github.com/user-attachments/assets/adcfc2ef-303c-4d07-83f4-ccd1ae6fe5d6" />
+
+<img width="fit-content" height="250" alt="event (4)" src="https://github.com/user-attachments/assets/3265fdbc-bb74-45dc-b6e3-4e022aed7def" />
